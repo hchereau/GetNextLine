@@ -6,7 +6,7 @@
 /*   By: imback <imback@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/04/03 12:06:02 by imback           ###   ########.fr       */
+/*   Updated: 2024/04/03 18:48:21 by imback           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ static void	add_str(char **dest, const char *src, const size_t size)
 	free(dest_free);
 }
 
-static int	get_new_line(const char *str, size_t size)
+static int	get_new_line(const char *str, const size_t size)
 {
 	size_t	i;
 
 	i = 0;
-	while (i < size - 1 && str[i] != '\n')
+	while (i < size && str[i] != '\n')
 	{
 		++i;
 	}
@@ -42,28 +42,47 @@ static void	add_rest(char	**dest, char *rest, const size_t size)
 	}
 }
 
+static void	fill_without_newline(t_file_data *line_data, char **line, int fd)
+{
+	while (line_data->i_newline == BUFFER_SIZE && line_data->bytes_read > 0)
+	{
+		add_str(line, line_data->buffer, line_data->bytes_read);
+		line_data->bytes_read = read(fd, line_data->buffer, BUFFER_SIZE);
+		line_data->i_newline = get_new_line(line_data->buffer, line_data->bytes_read);
+	}
+}
+static void	fill_line(char **line, char *rest, int fd)
+{
+	t_file_data	line_data;
+	size_t		i_newline_rest;
+
+	i_newline_rest = get_new_line(rest, ft_strlen(rest));
+	if (rest[i_newline_rest] != '\n')
+	{
+		add_rest(line, rest, i_newline_rest);
+		line_data.bytes_read = read(fd, line_data.buffer, BUFFER_SIZE);
+		line_data.i_newline = get_new_line(line_data.buffer, line_data.bytes_read);
+		fill_without_newline(&line_data, line, fd);
+		if (line_data.i_newline < line_data.bytes_read)
+		{
+			add_str(line, line_data.buffer, line_data.i_newline + 1);
+			ft_strlcpy(rest, line_data.buffer + line_data.i_newline + 1, line_data.bytes_read - line_data.i_newline);
+		}
+	}
+	else
+	{
+		add_rest(line, rest, i_newline_rest);
+		ft_strlcpy(rest, rest + i_newline_rest + 1, BUFFER_SIZE - i_newline_rest - 1);
+	}
+}
+
 char	*get_next_line(int fd)
 {
 	static char	rest[BUFFER_SIZE] = {0};
-	char		buffer[BUFFER_SIZE];
 	char		*line;
-	int			bytes_read;
-	int			i_newline;
 
-	add_rest(&line, rest, ft_strlen(rest));
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	i_newline = get_new_line(buffer, bytes_read);
-	while (i_newline == BUFFER_SIZE - 1 && bytes_read > 0)
-	{
-		add_str(&line, buffer, bytes_read);
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		i_newline = get_new_line(buffer, bytes_read);
-	}
-	if (i_newline < bytes_read)
-	{
-		add_str(&line, buffer, i_newline + 1);
-		ft_strlcpy(rest, buffer + i_newline + 1, bytes_read - i_newline - 1);
-	}
+	line = NULL;
+	fill_line(&line, rest, fd);
 	return line;
 }
 
@@ -74,6 +93,11 @@ int	main(void)
 	int	fd;
 	fd = open("test.txt", O_RDONLY);
 	printf("line1 = [%s]\n", get_next_line(fd));
+	printf("line2 = [%s]\n", get_next_line(fd));
+	printf("line3 = [%s]\n", get_next_line(fd));
+	printf("line4 = [%s]\n", get_next_line(fd));
+	printf("line5 = [%s]\n", get_next_line(fd));
+	printf("line6 = [%s]\n", get_next_line(fd));
 	close(fd);
 }
 

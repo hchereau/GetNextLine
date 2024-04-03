@@ -6,7 +6,7 @@
 /*   By: imback <imback@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:17:41 by imback            #+#    #+#             */
-/*   Updated: 2024/04/03 11:34:09 by imback           ###   ########.fr       */
+/*   Updated: 2024/04/03 15:12:29 by imback           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
+
+typedef struct s_file_data{
+	char	buffer[BUFFER_SIZE];
+	int		bytes_read;
+	int		i_newline;
+} t_file_data;
 
 char	*ft_strnjoin(char const *s1, char const *s2, size_t size);
 size_t	ft_strlen(const char *s);
