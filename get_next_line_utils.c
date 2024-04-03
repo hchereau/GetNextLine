@@ -6,7 +6,7 @@
 /*   By: imback <imback@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:15:12 by imback            #+#    #+#             */
-/*   Updated: 2024/04/03 17:41:15 by imback           ###   ########.fr       */
+/*   Updated: 2024/04/03 18:51:13 by imback           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,16 @@ char	*ft_strnjoin(char const *s1, char const *s2, size_t size)
 		join[size1 + size] = '\0';
 	}
 	return (join);
+}
+
+int	get_new_line(const char *str, const size_t size)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < size && str[i] != '\n')
+	{
+		++i;
+	}
+	return (i);
 }

@@ -6,12 +6,11 @@
 /*   By: imback <imback@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/04/03 18:48:21 by imback           ###   ########.fr       */
+/*   Updated: 2024/04/03 18:54:57 by imback           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 static void	add_str(char **dest, const char *src, const size_t size)
 {
@@ -20,18 +19,6 @@ static void	add_str(char **dest, const char *src, const size_t size)
 	dest_free = *dest;
 	*dest = ft_strnjoin(*dest, src, size);
 	free(dest_free);
-}
-
-static int	get_new_line(const char *str, const size_t size)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < size && str[i] != '\n')
-	{
-		++i;
-	}
-	return (i);
 }
 
 static void	add_rest(char	**dest, char *rest, const size_t size)
@@ -71,8 +58,8 @@ static void	fill_line(char **line, char *rest, int fd)
 	}
 	else
 	{
-		add_rest(line, rest, i_newline_rest);
-		ft_strlcpy(rest, rest + i_newline_rest + 1, BUFFER_SIZE - i_newline_rest - 1);
+		add_rest(line, rest, i_newline_rest + 1);
+		ft_strlcpy(rest, rest + i_newline_rest + 1, BUFFER_SIZE - i_newline_rest);
 	}
 }
 
@@ -88,6 +75,7 @@ char	*get_next_line(int fd)
 
 #include <fcntl.h>
 #include <string.h>
+#include <stdio.h>
 int	main(void)
 {
 	int	fd;
