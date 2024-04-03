@@ -6,7 +6,7 @@
 /*   By: imback <imback@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:17:41 by imback            #+#    #+#             */
-/*   Updated: 2024/04/02 13:11:44 by imback           ###   ########.fr       */
+/*   Updated: 2024/04/03 11:34:09 by imback           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # include <aio.h>
-# include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
 # include <unistd.h>
 
 # ifndef BUFFER_SIZE

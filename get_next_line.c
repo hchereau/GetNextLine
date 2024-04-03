@@ -6,11 +6,12 @@
 /*   By: imback <imback@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/04/02 14:13:28 by imback           ###   ########.fr       */
+/*   Updated: 2024/04/03 12:06:02 by imback           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 static void	add_str(char **dest, const char *src, const size_t size)
 {
@@ -23,10 +24,10 @@ static void	add_str(char **dest, const char *src, const size_t size)
 
 static int	get_new_line(const char *str, size_t size)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (i < size && str[i] != '\n')
+	while (i < size - 1 && str[i] != '\n')
 	{
 		++i;
 	}
@@ -60,10 +61,20 @@ char	*get_next_line(int fd)
 	}
 	if (i_newline < bytes_read)
 	{
-		add_str(line, buffer, i_newline + 1);
+		add_str(&line, buffer, i_newline + 1);
 		ft_strlcpy(rest, buffer + i_newline + 1, bytes_read - i_newline - 1);
 	}
 	return line;
+}
+
+#include <fcntl.h>
+#include <string.h>
+int	main(void)
+{
+	int	fd;
+	fd = open("test.txt", O_RDONLY);
+	printf("line1 = [%s]\n", get_next_line(fd));
+	close(fd);
 }
 
 // int	main(void)
