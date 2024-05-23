@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/05/23 15:18:13 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/23 19:13:49 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	fill_line(char *buffer, char *line, int fd)
 	}
 	while (bytes_read != 0 && !ft_strchr(line, '\n'))
 	{
-
+		ft_strjoin();
 	}
 
 }
