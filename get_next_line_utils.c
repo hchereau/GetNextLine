@@ -6,11 +6,21 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:15:12 by imback            #+#    #+#             */
-/*   Updated: 2024/05/23 20:01:31 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/23 20:34:44 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (s[len] != '\0')
+		++len;
+	return (len);
+}
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
@@ -27,16 +37,6 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 		dst[i] = '\0';
 	}
 	return (ft_strlen(src));
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	len = 0;
-	while (s[len] != '\0')
-		++len;
-	return (len);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)

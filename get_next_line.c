@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/05/23 19:13:49 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/23 21:04:47 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	fill_line(char *buffer, char *line, int fd)
 {
 	int	i;
 	int	bytes_read;
+	int	index_nl;
 
 	i = 0;
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
@@ -25,15 +26,17 @@ int	fill_line(char *buffer, char *line, int fd)
 	}
 	while (bytes_read != 0 && !ft_strchr(line, '\n'))
 	{
-		ft_strjoin();
+		ft_strjoin(line, buffer);
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
-
+	last_fill(line, buffer, );
+	return (line);
 }
 
 
 char	*get_next_line(int fd)
 {
-	static char	rest[BUFFER_SIZE];
+	static char	rest[BUFFER_SIZE] = {0};
 	char		buffer[BUFFER_SIZE];
 	char		*line;
 	int			is_error;
