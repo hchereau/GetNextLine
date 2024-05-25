@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:17:41 by imback            #+#    #+#             */
-/*   Updated: 2024/05/23 15:09:54 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/25 13:49:23 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,7 @@
 # endif
 
 char	*get_next_line(int fd);
+char	*ft_strjoin(char const *s1, char const *s2);
+void	ft_bzero(void *s, size_t n);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:15:12 by imback            #+#    #+#             */
-/*   Updated: 2024/05/23 20:34:44 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/25 13:57:55 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+static size_t	ft_strlen(const char *s)
 {
 	size_t	len;
 
@@ -60,4 +60,22 @@ char	*ft_strjoin(char const *s1, char const *s2)
 			ft_strlcpy(join + size1, s2, size2 + 1);
 	}
 	return (join);
+}
+
+static void	*ft_memset(void	*s, int c, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		((uint8_t *)s)[i] = (uint8_t)c;
+		++i;
+	}
+	return (s);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	ft_memset(s, 0, n);
 }

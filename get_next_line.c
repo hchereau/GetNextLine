@@ -6,11 +6,37 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/05/23 21:04:47 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:50:42 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+
+static int	find_char(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	c = (char)c;
+	while (s[i] != c && s[i] != '\0')
+	{
+		++i;
+	}
+	if (s[i] == c)
+		return (i);
+	return (-1);
+}
+
+static void	last_fill(char *line, char *buffer)
+{
+	const int	line_len = ft_strlen(line);
+	const int	i_new_line = find_char();
+	char		*final_line;
+
+
+}
+
 
 int	fill_line(char *buffer, char *line, int fd)
 {
@@ -24,13 +50,14 @@ int	fill_line(char *buffer, char *line, int fd)
 	{
 		return (EXIT_FAILURE);
 	}
-	while (bytes_read != 0 && !ft_strchr(line, '\n'))
+	while (bytes_read != 0 && !find_char(line, '\n') == -1)
 	{
 		ft_strjoin(line, buffer);
+		ft_bzero(buffer, BUFFER_SIZE);
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
-	last_fill(line, buffer, );
-	return (line);
+	last_fill(line, buffer);
+	return (EXIT_SUCCESS);
 }
 
 
