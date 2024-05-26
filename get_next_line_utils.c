@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchereau <hchereau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:15:12 by imback            #+#    #+#             */
-/*   Updated: 2024/05/25 13:57:55 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/26 23:56:02 by hchereau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static size_t	ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	len;
 
@@ -39,7 +39,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (ft_strlen(src));
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strnjoin(char const *s1, char const *s2, const int size)
 {
 	char	*join;
 	size_t	size1;
@@ -51,6 +51,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		size1 = ft_strlen(s1);
 	if (s2 != NULL)
 		size2 = ft_strlen(s2);
+	if (size2 > size)
+		size2 = size;
 	join = (char *)malloc((size1 + size2 + 1) * sizeof(char));
 	if (join != NULL)
 	{
@@ -59,10 +61,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		if (s2 != NULL)
 			ft_strlcpy(join + size1, s2, size2 + 1);
 	}
+	free(s1);
 	return (join);
 }
 
-static void	*ft_memset(void	*s, int c, size_t n)
+void	ft_bzero(void *s, size_t n)
 {
 	size_t	i;
 
@@ -73,9 +76,4 @@ static void	*ft_memset(void	*s, int c, size_t n)
 		++i;
 	}
 	return (s);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	ft_memset(s, 0, n);
 }

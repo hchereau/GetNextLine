@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hchereau <hchereau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/05/25 18:50:42 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/26 23:55:59 by hchereau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,48 +23,45 @@ static int	find_char(const char *s, int c)
 	{
 		++i;
 	}
-	if (s[i] == c)
-		return (i);
-	return (-1);
+	return (i);
 }
 
-static void	last_fill(char *line, char *buffer)
+static int	get_line(char *buffer, char *line, int fd, int bytes_read)
 {
-	const int	line_len = ft_strlen(line);
-	const int	i_new_line = find_char();
-	char		*final_line;
+	int	i_new_line;
 
-
+	i_new_line = find_char(buffer, '\n');
+	while (i_new_line != '\n' && bytes_read > 0)
+	{
+		ft_strnjoin(line, buffer, BUFFER_SIZE);
+		ft_bzero(buffer, BUFFER_SIZE);
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+	}
 }
-
 
 int	fill_line(char *buffer, char *line, int fd)
 {
-	int	i;
-	int	bytes_read;
-	int	index_nl;
+	static char	rest[BUFFER_SIZE + 1] = {0};
+	int			bytes_read;
+	int			is_success;
 
-	i = 0;
+	if (rest[0] != '\0')
+	{
+		ft_strlcpy(rest, line, ft_strlen(rest));
+	}
+	ft_bzero(buffer, BUFFER_SIZE + 1);
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	if (bytes_read < 0)
 	{
 		return (EXIT_FAILURE);
 	}
-	while (bytes_read != 0 && !find_char(line, '\n') == -1)
-	{
-		ft_strjoin(line, buffer);
-		ft_bzero(buffer, BUFFER_SIZE);
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-	}
-	last_fill(line, buffer);
-	return (EXIT_SUCCESS);
+	is_success = get_line(buffer, line, fd, bytes_read);
+	return (is_success);
 }
-
 
 char	*get_next_line(int fd)
 {
-	static char	rest[BUFFER_SIZE] = {0};
-	char		buffer[BUFFER_SIZE];
+	char		buffer[BUFFER_SIZE + 1];
 	char		*line;
 	int			is_error;
 
@@ -76,7 +73,6 @@ char	*get_next_line(int fd)
 		{
 			return (NULL);
 		}
-		print_line(line);
 		fill_rest(buffer);
 	}
 	return (line);
