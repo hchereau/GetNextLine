@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/05/27 18:13:35 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/27 23:37:44 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,12 @@ static void	fill_rest(char *buffer, char *rest)
 
 char	*get_next_line(int fd)
 {
-	char		buffer[BUFFER_SIZE + 1];
-	static char	rest[BUFFER_SIZE + 1] = {0};
+	char		*buffer;
+	static char	rest[BUFFER_SIZE + 1];
 	char		*line;
 
 	line = NULL;
+	buffer = malloc(BUFFER_SIZE + 1);
 	if (fd >= 0 && fd < 1024)
 	{
 		ft_bzero(buffer, BUFFER_SIZE + 1);
@@ -107,22 +108,24 @@ char	*get_next_line(int fd)
 			fill_rest(buffer, rest);
 		}
 	}
+	free(buffer);
 	return (line);
 }
 
-// #include <fcntl.h>
-// #include <string.h>
-// #include <stdio.h>
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*line;
-// 	fd = open("test.txt", O_RDONLY);
-// 	for (int i = 0; i < 6; i = i + 1)
-// 	{
-// 		line = get_next_line(fd);
-// 		printf("[%s]\n", line);
-// 		free(line);
-// 	}
-// 	close(fd);
-// }
+#include <fcntl.h>
+#include <string.h>
+#include <stdio.h>
+int	main(void)
+{
+	int		fd;
+	char	*line;
+	fd = open("test.txt", O_RDONLY);
+	line = get_next_line(fd);
+	while (line)
+	{
+		printf("%s", line);
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
+}
