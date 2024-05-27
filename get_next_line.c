@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchereau <hchereau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/05/26 23:55:59 by hchereau         ###   ########.fr       */
+/*   Updated: 2024/05/27 15:54:33 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,54 +26,88 @@ static int	find_char(const char *s, int c)
 	return (i);
 }
 
-static int	get_line(char *buffer, char *line, int fd, int bytes_read)
+static char	*get_line(char *buffer, char *line, int fd, int bytes_read)
 {
 	int	i_new_line;
 
 	i_new_line = find_char(buffer, '\n');
-	while (i_new_line != '\n' && bytes_read > 0)
+	while (buffer[i_new_line] != '\n' && bytes_read > 0)
 	{
-		ft_strnjoin(line, buffer, BUFFER_SIZE);
+		line = ft_strnjoin(line, buffer, BUFFER_SIZE);
+		if (line == NULL)
+		{
+			return (NULL);
+		}
 		ft_bzero(buffer, BUFFER_SIZE);
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		i_new_line = find_char(buffer, '\n');
 	}
+	if (buffer[i_new_line] == '\n')
+	{
+		line = ft_strnjoin(line, buffer, i_new_line + 1);
+		if (line == NULL)
+		{
+			return (NULL);
+		}
+	}
+	return (line);
 }
 
-int	fill_line(char *buffer, char *line, int fd)
+static char	*fill_line(char *buffer, char *line, char *rest, int fd)
 {
-	static char	rest[BUFFER_SIZE + 1] = {0};
-	int			bytes_read;
-	int			is_success;
+	int	bytes_read;
+	int	index_rest;
 
+	index_rest = find_char(rest, '\n');
 	if (rest[0] != '\0')
 	{
-		ft_strlcpy(rest, line, ft_strlen(rest));
+		line = ft_strnjoin(line, rest, index_rest + 1);
+		if (rest[index_rest] == '\n')
+		{
+			ft_strlcpy(rest, rest + index_rest + 1,
+				ft_strlen(rest) - index_rest);
+			return (line);
+		}
+		else
+			ft_bzero(rest, BUFFER_SIZE);
 	}
 	ft_bzero(buffer, BUFFER_SIZE + 1);
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	if (bytes_read < 0)
 	{
-		return (EXIT_FAILURE);
+		return (NULL);
 	}
-	is_success = get_line(buffer, line, fd, bytes_read);
-	return (is_success);
+	line = get_line(buffer, line, fd, bytes_read);
+	return (line);
+}
+
+static void	fill_rest(char *buffer, char *rest)
+{
+	const int	index = find_char(buffer, '\n');
+
+	ft_bzero(rest, BUFFER_SIZE);
+	ft_strlcpy(rest, buffer + index + 1, ft_strlen(buffer + index));
 }
 
 char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE + 1];
+	static char	rest[BUFFER_SIZE + 1] = {0};
 	char		*line;
-	int			is_error;
 
+	ft_bzero(buffer, BUFFER_SIZE + 1);
 	line = NULL;
 	if (fd >= 0)
 	{
-		is_error = fill_line(buffer, line, fd);
-		if (is_error)
+		line = fill_line(buffer, line, rest, fd);
+		if (line == NULL)
 		{
 			return (NULL);
 		}
-		fill_rest(buffer);
+		else if (rest[0] == '\0')
+		{
+			fill_rest(buffer, rest);
+		}
 	}
 	return (line);
 }
@@ -94,20 +128,4 @@ char	*get_next_line(int fd)
 // 	close(fd);
 // }
 
-// int	main(void)
-// {
-// 	char *str = "salutbonjour";
-// 	printf("\n%d\n", get_new_line(str, ft_strlen(str)));
-// }
 
-// int	main(void)
-// {
-// 	char	*dest;
-
-// 	dest = (char *)malloc(6 * sizeof(char));
-// 	strncpy(dest, "salut", 5);
-// 	dest[6] = '\0';
-// 	add_str(&dest, "bonjour", 7);
-// 	printf("\n%s\n", dest);
-// 	free(dest);
-// }

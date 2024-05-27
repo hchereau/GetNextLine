@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchereau <hchereau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:15:12 by imback            #+#    #+#             */
-/*   Updated: 2024/05/26 23:56:02 by hchereau         ###   ########.fr       */
+/*   Updated: 2024/05/27 15:54:49 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (ft_strlen(src));
 }
 
-char	*ft_strnjoin(char const *s1, char const *s2, const int size)
+char	*ft_strnjoin(char *s1, char const *s2, const size_t size)
 {
 	char	*join;
 	size_t	size1;
@@ -72,8 +72,7 @@ void	ft_bzero(void *s, size_t n)
 	i = 0;
 	while (i < n)
 	{
-		((uint8_t *)s)[i] = (uint8_t)c;
+		((uint8_t *)s)[i] = (uint8_t)'\0';
 		++i;
 	}
-	return (s);
 }
