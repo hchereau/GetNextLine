@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:15:12 by imback            #+#    #+#             */
-/*   Updated: 2024/05/27 15:54:49 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/27 16:58:39 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,20 @@ void	ft_bzero(void *s, size_t n)
 	i = 0;
 	while (i < n)
 	{
-		((uint8_t *)s)[i] = (uint8_t)'\0';
+		((uint8_t *)s)[i] = (uint8_t) '\0';
 		++i;
 	}
+}
+
+int	find_char(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	c = (char)c;
+	while (s[i] != c && s[i] != '\0')
+	{
+		++i;
+	}
+	return (i);
 }

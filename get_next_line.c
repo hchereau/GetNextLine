@@ -6,27 +6,14 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/05/27 15:54:33 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:13:35 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-
-static int	find_char(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	c = (char)c;
-	while (s[i] != c && s[i] != '\0')
-	{
-		++i;
-	}
-	return (i);
-}
-
-static char	*get_line(char *buffer, char *line, int fd, int bytes_read)
+static char	*get_line_from_buffer(char *line, char *buffer, int bytes_read,
+	int fd)
 {
 	int	i_new_line;
 
@@ -40,8 +27,22 @@ static char	*get_line(char *buffer, char *line, int fd, int bytes_read)
 		}
 		ft_bzero(buffer, BUFFER_SIZE);
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read < 0)
+		{
+			free(line);
+			return (NULL);
+		}
 		i_new_line = find_char(buffer, '\n');
 	}
+	return (line);
+}
+
+static char	*get_line(char *buffer, char *line, int fd, int bytes_read)
+{
+	int	i_new_line;
+
+	line = get_line_from_buffer(line, buffer, bytes_read, fd);
+	i_new_line = find_char(buffer, '\n');
 	if (buffer[i_new_line] == '\n')
 	{
 		line = ft_strnjoin(line, buffer, i_new_line + 1);
@@ -75,6 +76,7 @@ static char	*fill_line(char *buffer, char *line, char *rest, int fd)
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	if (bytes_read < 0)
 	{
+		free(line);
 		return (NULL);
 	}
 	line = get_line(buffer, line, fd, bytes_read);
@@ -95,16 +97,12 @@ char	*get_next_line(int fd)
 	static char	rest[BUFFER_SIZE + 1] = {0};
 	char		*line;
 
-	ft_bzero(buffer, BUFFER_SIZE + 1);
 	line = NULL;
-	if (fd >= 0)
+	if (fd >= 0 && fd < 1024)
 	{
+		ft_bzero(buffer, BUFFER_SIZE + 1);
 		line = fill_line(buffer, line, rest, fd);
-		if (line == NULL)
-		{
-			return (NULL);
-		}
-		else if (rest[0] == '\0')
+		if (rest[0] == '\0' && line != NULL)
 		{
 			fill_rest(buffer, rest);
 		}
@@ -117,15 +115,14 @@ char	*get_next_line(int fd)
 // #include <stdio.h>
 // int	main(void)
 // {
-// 	int	fd;
+// 	int		fd;
+// 	char	*line;
 // 	fd = open("test.txt", O_RDONLY);
-// 	printf("line1 = [%s]\n", get_next_line(fd));
-// 	printf("line2 = [%s]\n", get_next_line(fd));
-// 	printf("line3 = [%s]\n", get_next_line(fd));
-// 	printf("line4 = [%s]\n", get_next_line(fd));
-// 	printf("line5 = [%s]\n", get_next_line(fd));
-// 	printf("line6 = [%s]\n", get_next_line(fd));
+// 	for (int i = 0; i < 6; i = i + 1)
+// 	{
+// 		line = get_next_line(fd);
+// 		printf("[%s]\n", line);
+// 		free(line);
+// 	}
 // 	close(fd);
 // }
-
-
