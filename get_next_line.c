@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/05/27 23:37:44 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/05/28 12:20:48 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ char	*get_next_line(int fd)
 
 	line = NULL;
 	buffer = malloc(BUFFER_SIZE + 1);
+	if (buffer == NULL)
+		return (NULL);
 	if (fd >= 0 && fd < 1024)
 	{
 		ft_bzero(buffer, BUFFER_SIZE + 1);
@@ -112,20 +114,20 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-#include <fcntl.h>
-#include <string.h>
-#include <stdio.h>
-int	main(void)
-{
-	int		fd;
-	char	*line;
-	fd = open("test.txt", O_RDONLY);
-	line = get_next_line(fd);
-	while (line)
-	{
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-}
+// #include <fcntl.h>
+// #include <string.h>
+// #include <stdio.h>
+// int	main(void)
+// {
+// 	int		fd;
+// 	char	*line;
+// 	fd = open("test.txt", O_RDONLY);
+// 	line = get_next_line(fd);
+// 	while (line)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(fd);
+// 	}
+// 	close(fd);
+// }
