@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:17:41 by imback            #+#    #+#             */
-/*   Updated: 2024/05/28 12:25:00 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/04 13:06:56 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@
 # include <stdlib.h>
 # include <stdint.h>
 # include <unistd.h>
+# include <limits.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
+
+enum	e_line_satus{error = -1, complete_line, uncomplete_line};
 
 char	*get_next_line(int fd);
 char	*ft_strnjoin(char *s1, char const *s2, const size_t size);

@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:15:12 by imback            #+#    #+#             */
-/*   Updated: 2024/05/27 16:58:39 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:32:28 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,3 +89,5 @@ int	find_char(const char *s, int c)
 	}
 	return (i);
 }
+
+
