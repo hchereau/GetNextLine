@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:15:12 by imback            #+#    #+#             */
-/*   Updated: 2024/06/04 11:32:28 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/05 10:13:28 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,12 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-int	find_char(const char *s, int c)
+char	*ft_strchr(const char *s, int c)
 {
-	int	i;
-
-	i = 0;
 	c = (char)c;
-	while (s[i] != c && s[i] != '\0')
-	{
-		++i;
-	}
-	return (i);
+	while (*s != c && *s != '\0')
+		++s;
+	if (*s == c)
+		return ((char *)s);
+	return (NULL);
 }
-
-

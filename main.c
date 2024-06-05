@@ -4,6 +4,7 @@
 
 int	main(void)
 {
-	char *salut = "sa\nlut";
-	printf("%ld\n", strchr(salut, '\n') - salut);
+	char	*salut = "sal\nut";
+	char	*test = strchr(salut, '\n');
+	printf("%ld\n", test - salut);
 }
