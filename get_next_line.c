@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/06/05 11:49:11 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/05 14:29:14 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,6 @@ static void	replace_rest(char *rest,
 	{
 		ft_bzero(rest, BUFFER_SIZE + 1);
 	}
-}
-
-static enum e_line_status	read_line_from_file(char **line, char *rest)
-{
-	char				buffer[BUFFER_SIZE + 1];
-	enum e_line_status	line_status;
-
-	ft_bzero(buffer, BUFFER_SIZE + 1);
-	line_status = read_line_until_new_line(line, buffer);
-	if (line_status == uncomplete_line)
-	{
-		line_status = fill_line_from_src(line, buffer);
-	}
-	return (line_status);
 }
 
 static enum e_line_status	fill_line_from_src(char **line, char *src)
@@ -62,6 +48,21 @@ static enum e_line_status	fill_line_from_src(char **line, char *src)
 	return (line_status);
 }
 
+static enum e_line_status	read_line_from_file(char **line, char *rest, int fd)
+{
+	char				buffer[BUFFER_SIZE + 1];
+	enum e_line_status	line_status;
+
+	ft_bzero(buffer, BUFFER_SIZE + 1);
+	line_status = read_line_until_new_line(line, buffer, fd);
+	if (line_status == uncomplete_line)
+	{
+		line_status = fill_line_from_src(line, buffer);
+	}
+	return (line_status);
+}
+
+
 static enum e_line_status	read_line_from_rest(char **line, char *rest)
 {
 	enum e_line_status	line_status;
@@ -78,16 +79,22 @@ char	*get_next_line(int fd)
 
 	if (read_line_from_rest(&line, rest) == uncomplete_line)
 	{
-		read_line_from_file(&line, rest);
+		read_line_from_file(&line, rest, fd);
 	}
 	return (line);
 }
+int	main(void)
+{
+	char	*line;
+	int		*fd;
 
-// 	while (line)
-// 	{
-// 		printf("%s", line);
-// 		free(line);
-// 		line = get_next_line(fd);
-// 	}
-// 	close(fd);
-// }
+	fd = open("test.txt");
+	line = get_next_line(fd);
+	while (line)
+	{
+		printf("%s", line);
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
+}
