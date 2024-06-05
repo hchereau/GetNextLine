@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/06/05 18:51:06 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/05 19:02:22 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static void	replace_rest(char *rest,
 			enum e_line_status line_status)
@@ -93,16 +93,16 @@ static enum e_line_status	read_line_from_rest(char **line, char *rest)
 char	*get_next_line(int fd)
 {
 	char				*line;
-	static char			rest[BUFFER_SIZE + 1] = {0};
+	static char			rest[FOPEN_MAX][BUFFER_SIZE + 1] = {0};
 	enum e_line_status	line_status;
 
 	line = NULL;
-	if (fd < 0 || fd > 1024)
+	if (fd < 0 || fd > FOPEN_MAX)
 		return (NULL);
-	line_status = read_line_from_rest(&line, rest);
+	line_status = read_line_from_rest(&line, rest[fd]);
 	if (line_status == uncomplete_line)
 	{
-		line_status = read_line_from_file(&line, rest, fd);
+		line_status = read_line_from_file(&line, rest[fd], fd);
 	}
 	if (line_status == error_line)
 	{
