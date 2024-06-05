@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/06/05 14:29:14 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/05 18:35:52 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 static void	replace_rest(char *rest,
 			enum e_line_status line_status)
 {
+	const char	*end_line = ft_strchr(rest, '\n');
+
 	if (line_status == complete_line)
 	{
-		ft_strlcpy(rest, ft_strchr(rest, '\n') + 1,
-			ft_strlen(ft_strchr(rest, '\n')) + 1);
+		ft_strlcpy(rest, end_line + 1,
+			ft_strlen(end_line) + 1);
 	}
 	else
 	{
@@ -38,14 +40,26 @@ static enum e_line_status	fill_line_from_src(char **line, char *src)
 	}
 	else
 	{
-		*line = ft_strnjoin(*line, src, ft_strlen(src));
+		*line = ft_strnjoin(*line, src, ft_strlen(src) + 1);
 		line_status = uncomplete_line;
 	}
 	if (*line == NULL)
 	{
-		line_status = error;
+		line_status = error_line;
 	}
 	return (line_status);
+}
+
+static void	fill_rest_from_buffer(char *buffer, char *rest,
+	enum e_line_status line_status)
+{
+	const char	*end_line = ft_strchr(buffer, '\n');
+
+	if (line_status == complete_line)
+	{
+		ft_strlcpy(rest, end_line + 1,
+			(buffer + ft_strlen(buffer)) - end_line);
+	}
 }
 
 static enum e_line_status	read_line_from_file(char **line, char *rest, int fd)
@@ -58,43 +72,66 @@ static enum e_line_status	read_line_from_file(char **line, char *rest, int fd)
 	if (line_status == uncomplete_line)
 	{
 		line_status = fill_line_from_src(line, buffer);
+		fill_rest_from_buffer(buffer, rest, line_status);
 	}
 	return (line_status);
 }
-
 
 static enum e_line_status	read_line_from_rest(char **line, char *rest)
 {
 	enum e_line_status	line_status;
 
-	line_status = fill_line_from_src(line, rest);
-	replace_rest(rest, line_status);
+	line_status = uncomplete_line;
+	if (ft_strlen(rest) != 0)
+	{
+		line_status = fill_line_from_src(line, rest);
+		replace_rest(rest, line_status);
+	}
 	return (line_status);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*line;
-	static char	rest[BUFFER_SIZE + 1] = {0};
+	char				*line;
+	static char			rest[BUFFER_SIZE + 1] = {0};
+	enum e_line_status	line_status;
 
-	if (read_line_from_rest(&line, rest) == uncomplete_line)
+	line = NULL;
+	if (fd < 0 || fd > 1024)
+		return (NULL);
+	line_status = read_line_from_rest(&line, rest);
+	if (line_status == uncomplete_line)
 	{
-		read_line_from_file(&line, rest, fd);
+		line_status = read_line_from_file(&line, rest, fd);
 	}
+	if (line_status == error_line)
+		return (NULL);
 	return (line);
 }
-int	main(void)
-{
-	char	*line;
-	int		*fd;
 
-	fd = open("test.txt");
-	line = get_next_line(fd);
-	while (line)
-	{
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-}
+// #include <stdio.h>
+
+// int	main(void)
+// {
+// 	char	*line;
+// 	int		fd;
+
+// 	fd = open("test2.txt", O_RDONLY);
+// 	line = get_next_line(fd);
+// 	while (line)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(fd);
+// 	}
+// 	close(fd);
+// 	fd = open("test2.txt", O_RDONLY);
+// 	line = get_next_line(fd);
+// 	while (line)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(fd);
+// 	}
+// close(fd);
+// }
