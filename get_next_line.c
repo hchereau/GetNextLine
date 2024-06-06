@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/06/05 18:51:06 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/06 08:34:01 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,17 +97,12 @@ char	*get_next_line(int fd)
 	enum e_line_status	line_status;
 
 	line = NULL;
-	if (fd < 0 || fd > 1024)
+	if (fd < 0 || fd > FOPEN_MAX)
 		return (NULL);
 	line_status = read_line_from_rest(&line, rest);
 	if (line_status == uncomplete_line)
 	{
 		line_status = read_line_from_file(&line, rest, fd);
-	}
-	if (line_status == error_line)
-	{
-		free(line);
-		return (NULL);
 	}
 	return (line);
 }

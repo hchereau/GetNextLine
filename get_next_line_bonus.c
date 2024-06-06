@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/06/05 19:02:22 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/06 08:32:58 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,6 @@ char	*get_next_line(int fd)
 	if (line_status == uncomplete_line)
 	{
 		line_status = read_line_from_file(&line, rest[fd], fd);
-	}
-	if (line_status == error_line)
-	{
-		free(line);
-		return (NULL);
 	}
 	return (line);
 }
