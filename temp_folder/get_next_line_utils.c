@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:15:12 by imback            #+#    #+#             */
-/*   Updated: 2024/06/07 11:28:27 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/07 11:46:01 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ enum e_line_status	read_line_until_new_line(char **line, char *buffer,
 	char *const	temp_line = *line;
 
 
-	if (bytes_read < 0)
+	if (bytes_read < 0) //je vois pas comment reduire ceci sans faire une fonction supplementaire
 	{
 		free(*line);
 		*line = NULL;

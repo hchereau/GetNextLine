@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/06/07 11:35:36 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/07 11:47:45 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	replace_rest(char *rest,
 static enum e_line_status	fill_line_from_src(char **line, char *src)
 {
 	enum e_line_status	line_status;
-	const char			*new_line = ft_strchr(src, '\n');
+	const char			*new_line = ft_strchr(src, '\n'); //le fait de ne pas appeller strchr ici change le principe de ma fonction (et je peux pas l'enlever plus haut non plus)
 	char *const			temp_line = *line;
 	const size_t		len_line = new_line - src +1;
 
