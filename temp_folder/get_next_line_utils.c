@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:15:12 by imback            #+#    #+#             */
-/*   Updated: 2024/06/07 10:33:31 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/07 11:28:27 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,13 @@ enum e_line_status	read_line_until_new_line(char **line, char *buffer,
 	char		*new_line;
 	char *const	temp_line = *line;
 
+
+	if (bytes_read < 0)
+	{
+		free(*line);
+		*line = NULL;
+		return (error_line);
+	}
 	buffer[bytes_read] = '\0';
 	new_line = ft_strchr(buffer, '\n');
 	if (bytes_read > 0 && new_line == NULL)
@@ -106,12 +113,6 @@ enum e_line_status	read_line_until_new_line(char **line, char *buffer,
 	if (new_line == NULL && bytes_read == 0)
 	{
 		return (complete_line);
-	}
-	if (bytes_read < 0)
-	{
-		free(*line);
-		*line = NULL;
-		return (error_line);
 	}
 	return (uncomplete_line);
 }

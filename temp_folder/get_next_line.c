@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/06/07 10:41:22 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/07 11:35:36 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static enum e_line_status	read_line_from_rest(char **line, char *const rest)
 char	*get_next_line(int fd)
 {
 	char				*line;
-	static char			rest[BUFFER_SIZE + 1] = {0}; // si ca doit etre initialisé, vu que c'est une string, on ecrirai plutot rest[BUFFER_SIZE + 1] = ""
+	static char			rest[BUFFER_SIZE + 1] = {""};
 	enum e_line_status	line_status;
 
 	line = NULL;
@@ -106,20 +106,20 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-#include <stdio.h>
+// #include <stdio.h>
 
-int	main(void)
-{
-	char	*line;
-	int		fd;
+// int	main(void)
+// {
+// 	char	*line;
+// 	int		fd;
 
-	fd = open("test2.txt", O_RDONLY);
-	line = get_next_line(fd);
-	while (line)
-	{
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-}
+// 	fd = open("test3.txt", O_RDONLY);
+// 	line = get_next_line(fd);
+// 	while (line)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(fd);
+// 	}
+// 	close(fd);
+// }

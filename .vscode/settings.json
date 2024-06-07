@@ -5,6 +5,7 @@
 		"stdint.h": "c",
 		"aio.h": "c",
 		"get_next_line_bonus.h": "c",
-		"fcntl.h": "c"
+		"fcntl.h": "c",
+		"unistd.h": "c"
 	}
 }
