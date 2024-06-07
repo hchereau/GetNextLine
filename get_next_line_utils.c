@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:15:12 by imback            #+#    #+#             */
-/*   Updated: 2024/06/06 08:42:11 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/07 12:58:39 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,20 +61,7 @@ char	*ft_strnjoin(char *s1, char const *s2, const size_t size)
 		if (s2 != NULL)
 			ft_strlcpy(join + size1, s2, size2 + 1);
 	}
-	free(s1);
 	return (join);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n)
-	{
-		((uint8_t *)s)[i] = (uint8_t) '\0';
-		++i;
-	}
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -87,32 +74,31 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-
-
-enum e_line_status	read_line_until_new_line(char **line, char *buffer, int fd)
+enum e_line_status	read_line_until_new_line(char **line, char *buffer,
+	const int fd)
 {
-	enum e_line_status	line_status;
-	int					bytes_read;
+	const int	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	char		*new_line;
+	char *const	temp_line = *line;
 
-	line_status = uncomplete_line;
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	while (bytes_read > 0 && ft_strchr(buffer, '\n' ) == NULL)
-	{
-		*line = ft_strnjoin(*line, buffer, bytes_read);
-		if (*line == NULL)
-			return (error_line);
-		ft_bzero(buffer, BUFFER_SIZE + 1);
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-	}
-	if (ft_strchr(buffer, '\n') == NULL)
-	{
-		line_status = complete_line;
-	}
-	if (bytes_read < 0)
+
+	if (bytes_read < 0) //je vois pas comment reduire ceci sans faire une fonction supplementaire
 	{
 		free(*line);
 		*line = NULL;
-		line_status = error_line;
+		return (error_line);
 	}
-	return (line_status);
+	buffer[bytes_read] = '\0';
+	new_line = ft_strchr(buffer, '\n');
+	if (bytes_read > 0 && new_line == NULL)
+	{
+		*line = ft_strnjoin(*line, buffer, bytes_read);
+		free(temp_line);
+		if (*line == NULL)
+			return (error_line);
+		return (read_line_until_new_line(line, buffer, fd));
+	}
+	if (new_line == NULL && bytes_read == 0)
+		return (complete_line);
+	return (uncomplete_line);
 }

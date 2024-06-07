@@ -6,7 +6,7 @@
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:17:41 by imback            #+#    #+#             */
-/*   Updated: 2024/06/06 08:33:40 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/07 12:47:50 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ enum				e_line_status
 	complete_line,
 	uncomplete_line
 };
+
+typedef uint8_t	t_byte;
 
 char				*get_next_line(int fd);
 char				*ft_strnjoin(char *s1, char const *s2, const size_t size);
