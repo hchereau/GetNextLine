@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hucherea <hucherea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 12:14:28 by imback            #+#    #+#             */
-/*   Updated: 2024/06/07 16:33:21 by hucherea         ###   ########.fr       */
+/*   Updated: 2024/06/07 16:40:45 by hucherea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,16 +97,16 @@ static enum e_line_status	read_line_from_rest(char **line, char *const rest)
 char	*get_next_line(int fd)
 {
 	char				*line;
-	static char			rest[BUFFER_SIZE + 1] = {""};
+	static char			rest[FOPEN_MAX][BUFFER_SIZE + 1] = {""};
 	enum e_line_status	line_status;
 
 	line = NULL;
 	if (fd >= 0 && fd < FOPEN_MAX)
 	{
-		line_status = read_line_from_rest(&line, rest);
+		line_status = read_line_from_rest(&line, rest[fd]);
 		if (line_status == uncomplete_line)
 		{
-			line_status = read_line_from_file(&line, rest, fd);
+			line_status = read_line_from_file(&line, rest[fd], fd);
 		}
 	}
 	return (line);
